@@ -42,7 +42,7 @@ btc_df['DATETIME_CONVERTED'] = pd.to_datetime(btc_df.DATETIME_CONVERTED)
 ###lets do it for 10mns interval
 x = btc_df.head(n=10)
 
-btc_df_grouped = btc_df.groupby(pd.Grouper(key='DATETIME_CONVERTED',freq='10Min')).mean().reset_index()
+btc_df_grouped = btc_df.groupby(pd.Grouper(key='DATETIME_CONVERTED',freq='60Min')).mean().reset_index()
 
 ###fill the na values in the volume column as 0.0
 btc_df_grouped['Volume_(BTC)'].fillna(0.0,inplace=True)
