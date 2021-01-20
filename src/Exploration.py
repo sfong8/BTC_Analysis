@@ -32,5 +32,10 @@ df_prophet = Prophet(changepoint_prior_scale=0.15, daily_seasonality=True)
 df_prophet.fit(train_df)
 
 fcast_time=144   # 1 year
-df_forecast = df_prophet.make_future_dataframe(periods= fcast_time, freq='10mins')
+from datetime import datetime
+print(datetime.now())
+df_forecast = df_prophet.make_future_dataframe(periods= fcast_time, freq='10min')
 df_forecast.tail(10)
+print(datetime.now())
+
+df_forecast = df_prophet.predict(df_forecast)
