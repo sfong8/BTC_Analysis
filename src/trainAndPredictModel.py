@@ -41,5 +41,9 @@ df_forecast.tail(10)
 
 df_forecast = df_prophet.predict(df_forecast)
 
-
-df_forecast.to_parquet('../Data/df_forcast.parquet')
+import pickle
+pickle.dump( df_prophet, open( "prophet_model.pickle", "wb" ) )
+# df_forecast.to_parquet('../Data/df_forcast.parquet')
+forecast=df_forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+fig1 = df_prophet.plot(forecast)
+fig1.show()
