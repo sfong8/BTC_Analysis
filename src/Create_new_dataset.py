@@ -59,6 +59,6 @@ from matplotlib import pyplot
 
 
 ##use tyhe weighted price for noce
-btc_df_grouped2 = btc_df_grouped[['DATETIME_CONVERTED', 'Volume_(BTC)', 'Weighted_Price']]
+btc_df_grouped2 = btc_df_grouped[['DATETIME_CONVERTED', 'Volume_(BTC)','Open', 'High', 'Low', 'Close', 'Weighted_Price']]
 
-btc_df_grouped2.to_parquet(r'../Data/cleaned_dataset_20210117.parquet')
+btc_df_grouped2.to_parquet(r'../Data/cleaned_dataset_20210130.parquet')
