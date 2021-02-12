@@ -213,3 +213,6 @@ def train_dqn(env):
 
     return Q, total_losses, total_rewards
 Q, total_losses, total_rewards = train_dqn(Environment1(train))
+
+# import pickle
+# pickle.dump( Q, open( "q_network.pickle", "wb" ) )
