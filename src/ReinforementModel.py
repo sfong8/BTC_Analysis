@@ -7,6 +7,7 @@ import pandas as pd
 import chainer
 import chainer.functions as F
 import chainer.links as L
+from datetime import datetime
 from plotly import tools
 from plotly.graph_objs import *
 from plotly.offline import init_notebook_mode, iplot, iplot_mpl
@@ -23,6 +24,8 @@ df['NEW_DATETIME'] = df['DATETIME_CONVERTED'].apply(lambda x :x -timedelta(days=
 
 # tweets_group = pd.read_parquet(r'../Data/Tweets/tweets_cleaned.parquet')
 df['DATETIME_CONVERTED'] = pd.to_datetime(df.DATETIME_CONVERTED, utc = True)
+
+df = df [ df['DATETIME_CONVERTED'] >= '2018-01-01']
 df = df[['DATETIME_CONVERTED', 'Open', 'High', 'Low', 'Close','Volume_(BTC)']]
 df.columns = ['Date','Open','High','Low','Close','Volume']
 
@@ -41,6 +44,8 @@ train.index = train['Date']
 train.drop(columns=['Date'],inplace=True)
 test.index = test['Date']
 test.drop(columns=['Date'],inplace=True)
+
+###we create an environment to train the agent
 class Environment1:
 
     def __init__(self, data, history_t=90):
@@ -208,6 +213,7 @@ def train_dqn(env):
             log_reward = sum(total_rewards[((epoch + 1) - show_log_freq):]) / show_log_freq
             log_loss = sum(total_losses[((epoch + 1) - show_log_freq):]) / show_log_freq
             elapsed_time = time.time() - start
+            # now = datetime.now().__str__()
             print('\t'.join(map(str, [epoch + 1, epsilon, total_step, log_reward, log_loss, elapsed_time])))
             start = time.time()
 
