@@ -25,28 +25,32 @@ def reddit_connection():
     return reddit
 
 
-def getSubComments(comment, allComments, verbose=True):
+def getSubComments(comment, allComments,counter,len_list, verbose=True):
   allComments.append(comment)
   if not hasattr(comment, "replies"):
     replies = comment.comments()
-    if verbose: print("fetching (" + str(len(allComments)) + " comments fetched total)")
+    if verbose: print(f"fetching ( {str(len(allComments))} comments fetched total) in loop {counter} of {len_list}")
   else:
     replies = comment.replies
   for child in replies:
-    getSubComments(child, allComments, verbose=verbose)
+    getSubComments(child, allComments,counter,len_list, verbose=verbose)
 
 
-def getAll(r, submissionId, verbose=True):
+def getAll(r, submissionId,counter,len_list, verbose=True):
   submission = r.submission(submissionId)
   comments = submission.comments
   commentsList = []
   for comment in comments:
-    getSubComments(comment, commentsList, verbose=verbose)
+    getSubComments(comment, commentsList,counter,len_list, verbose=verbose)
   return commentsList
 
 
 
-sub_id = 'lhifig'
-
-reddit = reddit_connection()
-res = getAll(reddit, sub_id)
+sub_id_list = pd.read_csv('sub_id.csv')
+sub_id_list=list(sub_id_list)
+len_list = len(sub_id_list)
+counter = 0
+for sub_id in sub_id_list:
+    reddit = reddit_connection()
+    res = getAll(reddit, sub_id,counter,len_list)
+    counter +=1
