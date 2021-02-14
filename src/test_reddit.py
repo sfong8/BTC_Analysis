@@ -96,12 +96,31 @@ if run_list:
         counter +=1
         extracted.append(sub_id)
 r = reddit_connection()
-sub_id='li6l5u'
+sub_id='lj7rqo'
 submission = r.submission(sub_id)
+def get_commentIDs(sub_id):
+    page = requests.get(fr'https://api.pushshift.io/reddit/submission/comment_ids/{sub_id}')
+    soup = BeautifulSoup(page.content, 'lxml')
+    body = soup.find('body')
+    p= body.find('p').text
+    json_acceptable_string = p.replace("'", "\"")
+    d = json.loads(json_acceptable_string)
+    comment_ids = d.get('data')
+    return comment_ids
+def get_body(comment_id ):
+    comment = r.comment(comment_id)
+    return comment.body
+comment_ids = get_commentIDs(sub_id)
+empty = []
+for comment_id in comment_ids:
+    comment = r.comment(comment_id)
+    empty.append(comment)
 
-id = "gn1durd"
-
-comment = r.comment(id)
+df = pd.DataFrame(empty,columns=['comment'])
+df['body'] = df['comment'].apply(lambda x: get_body(x))
+ # id = "gn1durd"
+#
+# comment = r.comment(id)
 
 # res = getAll(r, sub_id)
 
