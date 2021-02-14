@@ -28,7 +28,7 @@ import pandas as pd
 from datetime import datetime
 from selenium import webdriver
 
-driver = webdriver.Chrome(r'/Users/simonfong/Downloads/chromedriver')
+driver = webdriver.Chrome(r'D:\Chrome Download\chromedriver_win32\chromedriver')
 driver.get(url)
 total_height = int(driver.execute_script("return document.body.scrollHeight"))
 # import time
@@ -86,6 +86,8 @@ for elem in elems:
         #x2 = elem.find_elements_by_tag_name('')
             x2= elem.find_elements_by_class_name('SQnoC3ObvgnGjWt90zD9Z')[0].get_attribute('href')
 
+        # num_comments = elem.find_elements_by_class_name('FHCV02u6Cp2zYL0fhQPsO')[0].text
+        # print(num_comments)
         sub_id.append(extract_subID(x2))
 
 

@@ -38,18 +38,12 @@ def reddit_connection():
     return reddit
 
 
-def getSubComments(comment, allComments,authors,created,upvoteList,postKarma,commentKarma,author_created_date, verbose=True):
+def getSubComments(comment, allComments,authors,created,upvoteList, verbose=True):
     allComments.append(comment.body)
     try:
         authors.append(comment.author.name)
-        postKarma.append(comment.author.link_karma)
-        commentKarma.append(comment.author.comment_karma)
-        author_created_date.append(comment.author.created_utc)
     except:
         authors.append('deleted')
-        postKarma.append('deleted')
-        commentKarma.append('deleted')
-        author_created_date.append('deleted')
     created.append(comment.created_utc)
     upvoteList.append(comment.ups)
     # if not hasattr(comment, "replies"):
@@ -75,23 +69,20 @@ def getAll(r, submissionId,counter=1,len_list=1, verbose=True):
     authorList = []
     createdList = []
     upvoteList=[]
-    postKarma = []
-    commentKarma = []
-    author_created_date = []
     old_time = datetime.now()
     for comment_id in comments_ids:
         comment =r.comment(comment_id)
-        getSubComments(comment, commentsList,authorList,createdList,upvoteList,postKarma,commentKarma,author_created_date, verbose=verbose)
+        getSubComments(comment, commentsList,authorList,createdList,upvoteList, verbose=verbose)
         if len(commentsList)%100 == 0:
             new_time = datetime.now()
             time_taken = new_time-old_time
             print(f'{len(commentsList)} out of {number_of_comments} - {str(new_time)} - time taken = {time_taken}. In loop {counter} of {len_list}')
             old_time=new_time
-    df = pd.DataFrame(list(zip(authorList,createdList,commentsList,postKarma,commentKarma,author_created_date)),columns =['user','timestamp','comment'])
+    df = pd.DataFrame(list(zip(authorList,createdList,commentsList)),columns =['user','timestamp','comment'])
     #df=df.drop_duplicates()
     return df
 
-run_list = True
+run_list = False
 if run_list:
     sub_id_list = pd.read_csv('sub_id.csv')
     sub_id_list=list(sub_id_list)
@@ -104,13 +95,13 @@ if run_list:
         res.to_csv(f'{sub_id}_csv.csv',index=None)
         counter +=1
         extracted.append(sub_id)
-# r = reddit_connection()
-# sub_id='li6l5u'
-# submission = r.submission(sub_id)
-# comments = submission.comments
-# id = "gn1dr7x"
+r = reddit_connection()
+sub_id='li6l5u'
+submission = r.submission(sub_id)
 
+id = "gn1durd"
 
+comment = r.comment(id)
 
 # res = getAll(r, sub_id)
 

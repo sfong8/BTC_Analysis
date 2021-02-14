@@ -93,7 +93,7 @@ def getAll(r, submissionId,counter=1,len_list=1, verbose=True):
 
 run_list = True
 if run_list:
-    sub_id_list = pd.read_csv('sub_id.csv')
+    sub_id_list = pd.read_csv('sub_id2.csv')
     sub_id_list=list(sub_id_list)
     len_list = len(sub_id_list)
     counter = 0
