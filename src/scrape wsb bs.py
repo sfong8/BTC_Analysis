@@ -31,13 +31,13 @@ from selenium import webdriver
 driver = webdriver.Chrome(r'D:\Chrome Download\chromedriver_win32\chromedriver')
 driver.get(url)
 total_height = int(driver.execute_script("return document.body.scrollHeight"))
-# import time
-# for i in range(1, total_height, 500):
-#     if driver.execute_script("return document.body.scrollHeight")==0:
-#         break
-#     else:
-#         driver.execute_script("window.scrollTo(0, {});".format(i))
-#         time.sleep(5)
+import time
+for i in range(1, total_height, 500):
+    if driver.execute_script("return document.body.scrollHeight")==0:
+        break
+    else:
+        driver.execute_script("window.scrollTo(0, {});".format(i))
+        time.sleep(5)
 
 # test = driver.find_element_by_xpath("/html/body/div/article/section[1]/div[2]/dl/dd[1]/a").
 pageSource = driver.page_source
@@ -70,8 +70,11 @@ sub_id =[]
 
 def extract_subID(x):
     x=str(x)
-    x2=x.split("https://www.reddit.com/r/wallstreetbets/comments/")[1]
-    x3 = x2.split('/daily_discussion_thread_for')[0]
+    try:
+        x2=x.split("https://www.reddit.com/r/wallstreetbets/comments/")[1]
+        x3 = x2.split('/daily_discussion_thread_for')[0]
+    except:
+        x3 = None
     return x3
 counter2= 0
 for elem in elems:
@@ -93,7 +96,7 @@ for elem in elems:
 
 import csv
 
-with open('sub_id.csv', 'w') as myfile:
+with open('sub_id_full.csv', 'w') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     wr.writerow(sub_id)
 
