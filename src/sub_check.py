@@ -114,8 +114,21 @@ text1 = '''Seq Sentence
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
 import pandas as pd
-import texthero as hero
+
 master_df['text_without_stopwords'] =master_df['comment'].apply(lambda x: ' '.join([word for word in str(x).split() if word not in (stop)]))
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
+ps = PorterStemmer()
+
+# Init the Wordnet Lemmatizer
+lemmatizer = WordNetLemmatizer()
+
+# def lemmatize_text(text):
+#     return [lemmatizer.lemmatize(w) for w in df1["comments_tokenized"]]
+
+master_df['test'] = master_df['text_without_stopwords'].apply(lambda x: ' '.join(lemmatizer.lemmatize(w) for w in x.split(" ")))
+z=master_df[['test','comment']]
 corpus = [' '.join(master_df['text_without_stopwords'].apply(lambda x: str(x).upper()))]
 words = nltk.tokenize.word_tokenize(corpus[0])
 #
@@ -126,4 +139,5 @@ y= pd.DataFrame.from_dict(filtered_word_freq, orient='index')
 y.reset_index(inplace=True)
 y.columns = ['word','count']
 y.sort_values(by=['count'],ascending=False,inplace=True)
+
 # print(filtered_word_freq)
