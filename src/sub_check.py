@@ -89,20 +89,19 @@ master_df = master_df[master_df.user!='deleted']
 import nltk
 # nltk.download('vader_lexicon')
 
-# from nltk.sentiment.vader import SentimentIntensityAnalyzer
-# analyzer = SentimentIntensityAnalyzer()
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+analyzer = SentimentIntensityAnalyzer()
 
-# def sentiment_scoring(x):
-#     comment= str(x)
-#     score = analyzer.polarity_scores(comment)
-#     if score['compound'] > 0.05:
-#         return 'pos'
-#     elif score['compound'] < -0.05:
-#         return 'neg'
-#     else:
-#         return 'neutral'
+def sentiment_scoring(x):
+    comment= str(x)
+    score = analyzer.polarity_scores(comment)
+    if score['compound'] > 0.05:
+        return 'pos'
+    elif score['compound'] < -0.05:
+        return 'neg'
+    else:
+        return 'neutral'
 
-# master_df['sentiment'] = master_df['comment'].apply(lambda x: sentiment_scoring(x))
 
 
 import nltk
@@ -143,8 +142,10 @@ for i in range(0,11):
     temp  = master_df[num_loops*i:num_loops*(i+1)]
     temp['test'] = temp['text_without_stopwords'].apply(lambda x: ' '.join(w.lemma_ for w in nlp(x)))
     master_df2 = pd.concat([temp,master_df2])
+master_df2['sentiment'] = master_df2['test'].apply(lambda x: sentiment_scoring(x))
 
-z=master_df2[['test','comment']]
+z=master_df2[['sentiment','test']]
+z=z[z['sentiment']!='neutral']
 corpus = [' '.join(master_df2['test'].apply(lambda x: str(x).upper()))]
 corp = ' '.join(master_df2['test'].apply(lambda x: str(x).upper()))
 # corpus_set = set([word for word in corp.split(' ')])
