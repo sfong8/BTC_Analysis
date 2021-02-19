@@ -126,11 +126,31 @@ lemmatizer = WordNetLemmatizer()
 
 # def lemmatize_text(text):
 #     return [lemmatizer.lemmatize(w) for w in df1["comments_tokenized"]]
+import spacy
 
+# Loading the Lemmatization dictionary
+nlp = spacy.load('en_core_web_sm')
+# nlp.max_length = 30_000_000
 master_df['test'] = master_df['text_without_stopwords'].apply(lambda x: ' '.join(lemmatizer.lemmatize(w) for w in x.split(" ")))
-z=master_df[['test','comment']]
-corpus = [' '.join(master_df['text_without_stopwords'].apply(lambda x: str(x).upper()))]
+# master_df['test'] = master_df['text_without_stopwords'].apply(lambda x: ' '.join(w.lemma_ for w in nlp(x)))
+
+num_loops = int(master_df.shape[0]/10)
+counter = 0
+master_df2 = pd.DataFrame()
+##loop through to use the spacy lemmitisation
+for i in range(0,11):
+    print(i)
+    temp  = master_df[num_loops*i:num_loops*(i+1)]
+    temp['test'] = temp['text_without_stopwords'].apply(lambda x: ' '.join(w.lemma_ for w in nlp(x)))
+    master_df2 = pd.concat([temp,master_df2])
+
+z=master_df2[['test','comment']]
+corpus = [' '.join(master_df2['test'].apply(lambda x: str(x).upper()))]
+corp = ' '.join(master_df2['test'].apply(lambda x: str(x).upper()))
+# corpus_set = set([word for word in corp.split(' ')])
+# corpus2 = nlp(' '.join(word for word in corpus_set))
 words = nltk.tokenize.word_tokenize(corpus[0])
+
 #
 # tokens_without_sw = [word for word in words if not word in stopwords.words()]
 fdist1 = nltk.FreqDist(words)
@@ -141,3 +161,5 @@ y.columns = ['word','count']
 y.sort_values(by=['count'],ascending=False,inplace=True)
 
 # print(filtered_word_freq)
+
+
